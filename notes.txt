@@ -1,0 +1,2 @@
+! generation d'id
+! implementer sequelize
