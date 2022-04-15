@@ -38,6 +38,7 @@ exports.createOne = (req, res) => {
         
 }
 
+// login
 exports.login = (req, res) => {
     User.findOne({ where: { email: req.body.email}})
         .then(user => {
@@ -51,10 +52,14 @@ exports.login = (req, res) => {
                     }
                     res.status(200).json({
                         user_id: user.user_id,
+                        user_firstName: user.first_name,
+                        user_lastName: user.last_name,
+                        user_email: user.email,
+
                         token: jwt.sign(
                             {user_id: user.user_id},
                             'RANDOM_TOKEN_SECRET',
-                            {expiresIn: '12h'}
+                            {expiresIn: '60'}
                         )
                     })
                 })
