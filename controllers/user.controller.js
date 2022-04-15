@@ -18,11 +18,7 @@ exports.findOneById = (req, res) => {
 
 // add one user to db
 exports.createOne = (req, res) => {
-    if (!req.body) {
-        res.status(400).json({ message: 'no body in request'})
-    }
-    res.status(200).json({ message: 'requete ok'})
-    /*
+    
     if (!req.body) {
         res.status(400).json({ message: 'no body in request'})
     }
@@ -39,7 +35,7 @@ exports.createOne = (req, res) => {
                 .catch(err => res.status(400).json({ err }))
         })
         .catch(err => res.status(400).json({ error: 'cant hash password'}))
-        */
+        
 }
 
 exports.login = (req, res) => {
