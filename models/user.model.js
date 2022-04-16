@@ -27,6 +27,10 @@ const User =  sequelize.define('User', {
         type: Sequelize.STRING,
         allowNull: false
     },
+    access_level: {
+        type: Sequelize.ENUM('admin, user'),
+        defaultValue: 'user'
+    },
     topics: {
         type: Sequelize.JSON,
         defaultValue: {"topics": []}
