@@ -3,6 +3,7 @@ const sequelize = require('./models/db')
 
 // routes objects
 const userRoutes = require('./routes/user.routes')
+const topicRoutes = require('./routes/topic.routes')
 
 // app
 const app = express()
@@ -37,6 +38,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
 // routes
-app.use('/user', userRoutes)
+app.use('/api/user', userRoutes)
+app.use('/api/topic', topicRoutes)
 
 module.exports = app

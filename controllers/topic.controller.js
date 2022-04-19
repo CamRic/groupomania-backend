@@ -14,6 +14,18 @@ exports.findOneById = (req, res) => {
         .catch(err => res.status(401).json({ err }))
 }
 
+// create one topic
+exports.createOne = (req, res) => {
+    const newTopic = Topic.build({
+        user_id: req.body.user_id,
+        title: req.body.title,
+        body: req.body.topicBody
+    })
+    newTopic.save()
+        .then(() => res.status(201).json({ topic: newTopic }))
+        .catch(err => res.status(401).json({ err }))
+}
+
 // delete one topic
 exports.deleteOne = (req, res) => {
     Topic.deleteOne({ where: { topic_id: req.params.id }})

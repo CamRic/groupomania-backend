@@ -7,7 +7,8 @@ const Topic = sequelize.define('Topic', {
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
-        unique: true
+        unique: true,
+        defaultValue: Sequelize.UUIDV4
     },
     user_id: {
         type: Sequelize.UUID,
@@ -16,10 +17,6 @@ const Topic = sequelize.define('Topic', {
     title: {
         type: Sequelize.STRING,
         allowNull: false
-    },
-    post_count: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
     },
     body: {
         type: Sequelize.TEXT, // ?

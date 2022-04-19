@@ -60,7 +60,7 @@ exports.login = (req, res) => {
                         token: jwt.sign(
                             {user_id: user.user_id},
                             'RANDOM_TOKEN_SECRET',
-                            {expiresIn: '60'}
+                            {expiresIn: '24h'}
                         )
                     })
                 })
@@ -72,18 +72,6 @@ exports.login = (req, res) => {
 
 // delete one user
 exports.deleteOne = (req, res) => {
-    // User.findOne({where: { user_id: req.params.id }})
-    //     .then((user) => {
-    //         user.destroy()
-    //             .then((res) => res.status(200).json({ message: 'user removed from db' }))
-    //             .catch(err => res.status(400).json({ message: 'error destroying user' }))
-    //     })
-    //     .catch(err => res.status(400).json({ message: 'error finding user' }))
-
-    // User.destroy({where: {user_id: req.params.id }})
-    //     .then((res) => res.status(204).json({ message: 'user destroyed'}))
-    //     .catch(() => res.status(401).json({ error: 'error destroying user'}))
-
     User.destroy({where: {user_id: req.params.id }})
         .then((row) => {
             console.log(row)
@@ -91,6 +79,8 @@ exports.deleteOne = (req, res) => {
         }).catch(() => res.status(401).json({ error: 'error destroying user'}))
 }
 
+
+// modify user
 exports.updateOne = (req, res) => {
     User.findOne({ where: { user_id: req.params.id }})
         .then(user => {
@@ -102,43 +92,3 @@ exports.updateOne = (req, res) => {
         .catch(err => res.status(400).json({ err }))
     
 }
-/*
-
-/*
-// deleting one user
-exports.deleteUser = (req, res) => {
-    
-
-    Utilisateur.deleteOne(req.params.id, (err, data) => {
-        if (err) {
-            if (err.kind == 'not_found') res.status(404).send({message: `user(${req.params.id}) not found`})
-            else res.status(500).send({message: `Could not delete user(${req.params.id})`})
-        } else {
-            res.send({message: 'user was deleted successfully!'})
-        }
-
-    })
-
-}
-
-// updating one user
-exports.updateOne = (req, res) => {
-    // valide request
-    if (!req.body) {
-        res.status(400).send({ message: 'Content cannot be empty!' })
-    }
-    console.log(req.body)
-    Utilisateur.updateById(req.params.id, new Utilisateur(req.body), (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-                res.status(404).send({ message: `user(${req.params.id}) not found`})
-            } else {
-                res.status(500).send({ message: `error updating user(${req.params.id})`})
-            }
-        } else {
-            res.send(data)
-        }
-    })
-}
-
-*/
