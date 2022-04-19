@@ -1,6 +1,7 @@
 const User = require('../models/user.model')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { json } = require('express/lib/response')
 
 // find all users
 exports.findAll = (req, res) => {
@@ -63,7 +64,7 @@ exports.login = (req, res) => {
                         )
                     })
                 })
-                .catch(err => res.status(400).json({ err }))
+                .catch(() => res.status(400).json({ message: 'invalide password'}))
         })
         .catch(err => res.status(400).json({ err }))
         
@@ -71,13 +72,23 @@ exports.login = (req, res) => {
 
 // delete one user
 exports.deleteOne = (req, res) => {
-    User.findOne({where: { user_id: req.params.id }})
-        .then(user => {
-            user.destroy()
-                .then(() => res.status(200).json({ message: 'user removed from db' }))
-                .catch(err => res.status(400).json({ err }))
-        })
-        .catch(err => res.status(400).json({ err }))
+    // User.findOne({where: { user_id: req.params.id }})
+    //     .then((user) => {
+    //         user.destroy()
+    //             .then((res) => res.status(200).json({ message: 'user removed from db' }))
+    //             .catch(err => res.status(400).json({ message: 'error destroying user' }))
+    //     })
+    //     .catch(err => res.status(400).json({ message: 'error finding user' }))
+
+    // User.destroy({where: {user_id: req.params.id }})
+    //     .then((res) => res.status(204).json({ message: 'user destroyed'}))
+    //     .catch(() => res.status(401).json({ error: 'error destroying user'}))
+
+    User.destroy({where: {user_id: req.params.id }})
+        .then((row) => {
+            console.log(row)
+            res.status(204).json({message: `user destroyed at row ${row}`})
+        }).catch(() => res.status(401).json({ error: 'error destroying user'}))
 }
 
 exports.updateOne = (req, res) => {
