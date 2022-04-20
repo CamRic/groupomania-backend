@@ -13,7 +13,12 @@ exports.findAll = (req, res) => {
 // find one user
 exports.findOneById = (req, res) => {
     User.findOne({where: {user_id: req.params.id}})
-        .then(user => res.status(201).json({ user }))
+        .then(rawUser => {
+            console.log(rawUser)
+            var user = rawUser.toJSON()
+            console.log(user)
+            res.status(200).json({ user })
+        })
         .catch(err => console.log(err))
 }
 

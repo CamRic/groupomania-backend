@@ -26,6 +26,38 @@ exports.createOne = (req, res) => {
         .catch(err => res.status(401).json({ err }))
 }
 
+// modify one
+exports.addPostId = (req, res) => {
+    Topic.findOne({where: {topic_id: req.params.topicid}})
+        .then(topic => res.status(200).json({ topic }))
+        .catch(err => res.status(401).json({ err }))
+
+    // Topic.update({
+    //     replies: req.body.replies,
+    // },{
+    //     where: {topic_id: req.params.topicid}
+    // })
+    //     .then(() => res.status(202).json({ res }))
+    //     .catch(err => res.status(401).json({ err }))
+
+
+
+
+    // Topic.findOne({where: {topic_id: req.params.topicid}})
+    //     .then((topic) => {
+    //         console.log(topic.replies.replies)
+    //         console.log(req.params.postid)
+    //         var newReplies = topic.replies.replies
+    //         newReplies.push(req.params.postid)
+    //         topic.replies.replies = newReplies
+    //         console.log(topic.replies.replies)
+    //         topic.save()
+    //             .then(() => res.status(202).json({ message: 'topic modified in ddb'}))
+    //             .catch(err => res.status(401).json({ err }))
+    //     })
+    //     .catch(err => res.status(401).json({ err }))
+}
+
 // delete one topic
 exports.deleteOne = (req, res) => {
     Topic.deleteOne({ where: { topic_id: req.params.id }})

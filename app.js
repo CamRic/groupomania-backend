@@ -4,6 +4,7 @@ const sequelize = require('./models/db')
 // routes objects
 const userRoutes = require('./routes/user.routes')
 const topicRoutes = require('./routes/topic.routes')
+const postRoutes = require('./routes/post.routes')
 
 // app
 const app = express()
@@ -40,5 +41,6 @@ app.use(express.json())
 // routes
 app.use('/api/user', userRoutes)
 app.use('/api/topic', topicRoutes)
+app.use('/api/post', postRoutes)
 
 module.exports = app

@@ -7,7 +7,8 @@ const Post = sequelize.define('Post', {
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
-        unique: true
+        unique: true,
+        defaultValue: Sequelize.UUIDV4
     },
     topic_id: {
         type: Sequelize.UUID,
