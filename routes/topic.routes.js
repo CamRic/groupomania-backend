@@ -13,6 +13,6 @@ router.get('/:id', topicCtrl.findOneById)
 router.post('/', topicCtrl.createOne)
 
 // add one post_id to topic
-router.put('/:topicid/post/:postid', topicCtrl.addPostId)
+router.put('/:topicid', topicCtrl.addPostId)
 
 module.exports = router
