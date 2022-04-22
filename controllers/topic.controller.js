@@ -14,6 +14,16 @@ exports.findOneById = (req, res) => {
         .catch(err => res.status(401).json({ err }))
 }
 
+// find user topic
+exports.findByUser = (req, res) => {
+    Topic.findAll({where: {user_id: req.params.id}})
+        .then(topics => {
+            res.status(201).json({ topics })
+        })
+        .catch(err => res.status(404).json({ err }))
+
+}
+
 // create one topic
 exports.createOne = (req, res) => {
     const newTopic = Topic.build({
@@ -26,7 +36,7 @@ exports.createOne = (req, res) => {
         .catch(err => res.status(401).json({ err }))
 }
 
-// modify one²
+// modify one
 exports.addPostId = (req, res) => {
     // Topic.findOne({where: {topic_id: req.params.topicid}})
     //     .then(topic => {

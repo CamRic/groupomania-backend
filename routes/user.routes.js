@@ -15,6 +15,7 @@ router.post('/signup', userCtrl.createOne)
 
 // connection
 router.post('/login', userCtrl.login)
+router.post('/retrieve', userCtrl.retrieveConnection)
 
 // delete one
 router.delete('/:id', auth, userCtrl.deleteOne)

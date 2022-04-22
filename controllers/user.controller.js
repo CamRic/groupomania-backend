@@ -61,11 +61,15 @@ exports.login = (req, res) => {
                         user_firstName: user.first_name,
                         user_lastName: user.last_name,
                         user_email: user.email,
+                        user_role: user.access_level,
 
                         token: jwt.sign(
-                            {user_id: user.user_id},
+                            {
+                                user_id: user.user_id,
+                                user_role: user.access_level
+                            },
                             'RANDOM_TOKEN_SECRET',
-                            {expiresIn: '24h'}
+                            {expiresIn: '6h'}
                         )
                     })
                 })
@@ -73,6 +77,38 @@ exports.login = (req, res) => {
         })
         .catch(err => res.status(400).json({ err }))
         
+}
+
+// retrieve connection
+exports.retrieveConnection = (req, res) => {
+    
+    const token = req.headers.authorization.split(' ')[1]
+    jwt.verify(token, 'RANDOM_TOKEN_SECRET', (err, decoded) => {
+        if (err) {
+            res.status(401).json({ err: 'bad token' })
+        }
+        const userId = decoded.user_id
+        User.findOne({where: {user_id: userId}})
+            .then((user) => {
+                res.status(200).json({
+                    user_id: user.user_id,
+                    user_firstName: user.first_name,
+                    user_lastName: user.last_name,
+                    user_email: user.email,
+                    user_role: user.access_level,
+                    token: jwt.sign(
+                        {
+                            user_id: user.user_id,
+                            user_role: user.access_level
+                        },
+                        'RANDOM_TOKEN_SECRET',
+                        {expiresIn: '6h'}
+                    )
+                
+                })
+            })
+            .catch(err => res.status(401).json({ err: 'cant retrieve connection, please login'}))
+    })
 }
 
 // delete one user
@@ -87,13 +123,42 @@ exports.deleteOne = (req, res) => {
 
 // modify user
 exports.updateOne = (req, res) => {
-    User.findOne({ where: { user_id: req.params.id }})
-        .then(user => {
-            user.email = req.body.email
-            user.save()
-                .then(() => res.status(200).json({ message: 'user updated in db'}))
-                .catch(err => res.status(400).json({ err }))
+    if (!req.body) {
+        res.status(400).json({ message: 'no body in request'})
+    }
+    if (req.body.password.length > 3) {
+        bcrypt.hash(req.body.password, 10)
+            .then(hash => {
+                User.update({
+                    email: req.body.email,
+                    first_name: req.body.first_name,
+                    last_name: req.body.last_name,
+                    password: hash
+                },
+                {
+                    where: {user_id: req.params.id}
+                })
+                .then((row) => res.status(202).json({ row }))
+                .catch(err => res.status(401).json({ err }))
+            })
+            .catch(err => res.status(401).json({ err }))
+    }
+    User.update({
+            email: req.body.email,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+        },
+        {
+            where: {user_id: req.params.id}
         })
-        .catch(err => res.status(400).json({ err }))
+            .then((row) => res.status(202).json({ row }))
+            .catch(err => res.status(401).json({ err }))
+
+
+    
+}
+
+// get user's topic
+exports.findTopics = (req, res) => {
     
 }

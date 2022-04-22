@@ -6,6 +6,9 @@ const topicCtrl = require('../controllers/topic.controller')
 // get all topics
 router.get('/', topicCtrl.findAll)
 
+// get users topic
+router.get('/user/:id', topicCtrl.findByUser)
+
 // get one topic
 router.get('/:id', topicCtrl.findOneById)
 
