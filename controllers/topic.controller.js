@@ -27,6 +27,7 @@ exports.findByUser = (req, res) => {
 // create one topic
 exports.createOne = (req, res) => {
     const newTopic = Topic.build({
+        imageUrl: req.body.file,
         user_id: req.body.user_id,
         title: req.body.title,
         body: req.body.topicBody
@@ -57,11 +58,9 @@ exports.addPostId = (req, res) => {
 
 // delete one topic
 exports.deleteOne = (req, res) => {
-    Topic.deleteOne({ where: { topic_id: req.params.id }})
-        .then(topic => {
-            topic.destroy()
-                .then(() => res.status(200).json({ message: 'user removed from db' }))
-                .catch(err => res.status(400).json({ err }))
+    Topic.destroy({ where: { topic_id: req.params.id }})
+        .then(row => {
+            res.status(200).json({message: 'topic destroyed'})
         })
         .catch(err => res.status(401).json({ err }))
 }

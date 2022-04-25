@@ -22,6 +22,9 @@ const Topic = sequelize.define('Topic', {
         type: Sequelize.TEXT, // ?
         allowNull: false
     },
+    imageUrl: {
+        type: Sequelize.STRING,
+    },
     replies: {
         type: Sequelize.JSON,
         defaultValue: {"replies": []}

@@ -28,11 +28,15 @@ exports.createOne = (req, res) => {
 
 // delete one topic
 exports.deleteOne = (req, res) => {
-    Post.deleteOne({ where: { post_id: req.params.id }})
-        .then(post => {
-            post.destroy()
-                .then(() => res.status(200).json({ message: 'user removed from db' }))
-                .catch(err => res.status(400).json({ err }))
-        })
-        .catch(err => res.status(401).json({ err }))
+    Post.destroy({where: {post_id: req.params.id}})
+        .then(row => res.status(203).json({message: 'post deleted'}))
+        .catch(err => res.status(400).json({err}))
+   
+    // Post.deleteOne({ where: { post_id: req.params.id }})
+    //     .then(post => {
+    //         post.destroy()
+    //             .then(() => res.status(200).json({ message: 'user removed from db' }))
+    //             .catch(err => res.status(400).json({ err }))
+    //     })
+    //     .catch(err => res.status(401).json({ err }))
 }

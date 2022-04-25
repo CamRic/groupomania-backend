@@ -12,14 +12,15 @@ exports.findAll = (req, res) => {
 
 // find one user
 exports.findOneById = (req, res) => {
+    // User.findOne({where: {user_id: req.params.id}})
+    //     .then(rawUser => {
+    //         //var user = rawUser.JSON()
+    //         res.status(200).json({ rawUser })
+    //     })
+    //     .catch(err => console.log(err))
     User.findOne({where: {user_id: req.params.id}})
-        .then(rawUser => {
-            console.log(rawUser)
-            var user = rawUser.toJSON()
-            console.log(user)
-            res.status(200).json({ user })
-        })
-        .catch(err => console.log(err))
+        .then(user => res.status(200).json( {user} ))
+        .catch(err => res.status(400).json({err}))
 }
 
 // add one user to db
@@ -116,43 +117,71 @@ exports.deleteOne = (req, res) => {
     User.destroy({where: {user_id: req.params.id }})
         .then((row) => {
             console.log(row)
-            res.status(204).json({message: `user destroyed at row ${row}`})
-        }).catch(() => res.status(401).json({ error: 'error destroying user'}))
+            return res.status(204).json({ data: "user destroyed" })
+        })
+        .catch((err) => res.status(401).json({ err }))
 }
 
 
 // modify user
 exports.updateOne = (req, res) => {
-    if (!req.body) {
-        res.status(400).json({ message: 'no body in request'})
-    }
-    if (req.body.password.length > 3) {
-        bcrypt.hash(req.body.password, 10)
-            .then(hash => {
-                User.update({
-                    email: req.body.email,
-                    first_name: req.body.first_name,
-                    last_name: req.body.last_name,
-                    password: hash
-                },
-                {
-                    where: {user_id: req.params.id}
-                })
-                .then((row) => res.status(202).json({ row }))
-                .catch(err => res.status(401).json({ err }))
-            })
-            .catch(err => res.status(401).json({ err }))
-    }
-    User.update({
-            email: req.body.email,
-            first_name: req.body.first_name,
-            last_name: req.body.last_name,
-        },
-        {
-            where: {user_id: req.params.id}
+    let password;
+    if (req.body.password) {
+        bcrypt.hash(req.body.password, 10).then(hash => {
+            password = hash
         })
-            .then((row) => res.status(202).json({ row }))
-            .catch(err => res.status(401).json({ err }))
+    }
+    const user = {
+        email: req.body.email,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        password,
+    }
+    // file system
+    if (req.file) {
+        console.log('file in req')
+    }
+    User.update(user, {where: {user_id: req.params.id}})
+        .then(data => {
+            if (data[0] === 0) {
+                return res.status(404).json({ message: 'user not found' })
+            }
+            res.status(200).json({ message: 'user modified' })
+        })
+        .catch(err => res.status(500).json({ err }))
+    // console.log(req.params.id)
+    // if (!req.body) {
+    //     return res.status(400).json({ message: 'no body in request'})
+    // }
+    // if (req.body.password.length > 3) {
+    //     console.log('hashing password...')
+    //     bcrypt.hash(req.body.password, 10)
+    //         .then((hash) => {
+    //             console.log('updating user...')
+    //             User.update({
+    //                 email: req.body.email,
+    //                 first_name: req.body.first_name,
+    //                 last_name: req.body.last_name,
+    //                 password: hash
+    //             },
+    //             {
+    //                 where: {user_id: req.params.id}
+    //             })
+    //                 .then((row) => res.status(202).json({ row }))
+    //                 .catch((err) => res.status(401).json({err}))
+    //         })
+    //         .catch(err => res.status(401).json({ err }))
+    // }
+    // User.update({
+    //         email: req.body.email,
+    //         first_name: req.body.first_name,
+    //         last_name: req.body.last_name,
+    //     },
+    //     {
+    //         where: {user_id: req.params.id}
+    //     })
+    //         .then((row) => res.status(202).json({ row }))
+    //         .catch(err => res.status(401).json({ err }))
 
 
     
