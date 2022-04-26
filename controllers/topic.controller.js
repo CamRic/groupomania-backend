@@ -27,7 +27,7 @@ exports.findByUser = (req, res) => {
 // create one topic
 exports.createOne = (req, res) => {
     const newTopic = Topic.build({
-        imageUrl: req.body.file,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         user_id: req.body.user_id,
         title: req.body.title,
         body: req.body.topicBody
