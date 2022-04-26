@@ -131,10 +131,14 @@ exports.updateOne = (req, res) => {
             password = hash
         })
     }
+    if (req.body.posts) {
+        console.log(req.body.posts)
+    }
     const user = {
         email: req.body.email,
         first_name: req.body.first_name,
         last_name: req.body.last_name,
+        posts: req.body.posts,
         password,
     }
     // file system
@@ -149,45 +153,9 @@ exports.updateOne = (req, res) => {
             res.status(200).json({ message: 'user modified' })
         })
         .catch(err => res.status(500).json({ err }))
-    // console.log(req.params.id)
-    // if (!req.body) {
-    //     return res.status(400).json({ message: 'no body in request'})
-    // }
-    // if (req.body.password.length > 3) {
-    //     console.log('hashing password...')
-    //     bcrypt.hash(req.body.password, 10)
-    //         .then((hash) => {
-    //             console.log('updating user...')
-    //             User.update({
-    //                 email: req.body.email,
-    //                 first_name: req.body.first_name,
-    //                 last_name: req.body.last_name,
-    //                 password: hash
-    //             },
-    //             {
-    //                 where: {user_id: req.params.id}
-    //             })
-    //                 .then((row) => res.status(202).json({ row }))
-    //                 .catch((err) => res.status(401).json({err}))
-    //         })
-    //         .catch(err => res.status(401).json({ err }))
-    // }
-    // User.update({
-    //         email: req.body.email,
-    //         first_name: req.body.first_name,
-    //         last_name: req.body.last_name,
-    //     },
-    //     {
-    //         where: {user_id: req.params.id}
-    //     })
-    //         .then((row) => res.status(202).json({ row }))
-    //         .catch(err => res.status(401).json({ err }))
-
-
     
 }
 
-// get user's topic
 exports.findTopics = (req, res) => {
     
 }

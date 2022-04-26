@@ -64,3 +64,9 @@ exports.deleteOne = (req, res) => {
         })
         .catch(err => res.status(401).json({ err }))
 }
+
+exports.deleteByUserId = (req, res) => {
+    Topic.destroy({where: {user_id: req.params.id}})
+        .then(row => res.status(200).json({message: 'user topics destroyed'}))
+        .catch(err => res.status(401).json({ err }))
+}

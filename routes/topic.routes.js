@@ -21,5 +21,7 @@ router.put('/:topicid', topicCtrl.addPostId)
 
 // delete one topic
 router.delete('/:id', topicCtrl.deleteOne)
+// delete users topcs
+router.delete('/user/:id', topicCtrl.deleteByUserId)
 
 module.exports = router

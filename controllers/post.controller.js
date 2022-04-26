@@ -14,6 +14,12 @@ exports.findOneById = (req, res) => {
         .catch(err => res.status(401).json({ err }))
 }
 
+exports.findAllInTopic = (req, res) => {
+    Post.findAll({where: {topic_id: req.params.id}})
+        .then(posts => res.status(200).json({ posts }))
+        .catch(err => res.status(400).json({ err }))
+}
+
 // create one topic
 exports.createOne = (req, res) => {
     const newPost = Post.build({
@@ -32,11 +38,16 @@ exports.deleteOne = (req, res) => {
         .then(row => res.status(203).json({message: 'post deleted'}))
         .catch(err => res.status(400).json({err}))
    
-    // Post.deleteOne({ where: { post_id: req.params.id }})
-    //     .then(post => {
-    //         post.destroy()
-    //             .then(() => res.status(200).json({ message: 'user removed from db' }))
-    //             .catch(err => res.status(400).json({ err }))
-    //     })
-    //     .catch(err => res.status(401).json({ err }))
+}
+
+exports.deletePostByTopicId = (req, res) => {
+    Post.destroy({where: {topic_id: req.params.id}})
+        .then(row => res.status(200).json({message: 'posts deleted'}))
+        .catch(err => res.status(400).json({err}))
+}
+
+exports.deletePostByUserId = (req, res) => {
+    Post.destroy({where: {user_id: req.params.id}})
+        .then(row => res.status(200).json({message: 'user topics destroyed'}))
+        .catch(err => res.status(401).json({ err }))
 }
