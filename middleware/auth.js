@@ -11,20 +11,15 @@ module.exports = (req, res, next) => {
     jwt.verify(requestToken, 'RANDOM_TOKEN_SECRET', (err, decoded) => {
         if (err) {
             console.log(err)
-            res.status(400).json({  err })
+            res.status(401).json({ message: 'unauthorized request' })
         } else {
             const requestUserId = decoded.user_id
             const requestUserRole = decoded.user_role
             console.log(requestUserRole)
-            req.auth = {userId: requestUserId}
-            if (req.auth.userId !== req.params.id && requestUserRole !== 'admin') {
-                console.log('role: ' + requestUserRole)
-                console.log('paramsId: ' + req.params.id)
-                console.log('reqId: ' + req.auth.userId)
-                res.status(401).json({ message: 'unauthorized request'})
-            } else {
-                next()
-            }
+            console.log(requestUserId)
+            req.auth = {userId: requestUserId, userRole: requestUserRole}
+            console.log(req.auth)
+            next()
         }
     })
 

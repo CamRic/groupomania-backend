@@ -5,21 +5,21 @@ const postCtrl = require('../controllers/post.controller')
 const auth = require('../middleware/auth')
 
 // get all posts
-router.get('/', postCtrl.findAll)
+router.get('/', auth, postCtrl.findAll)
 // get all topic posts
-router.get('/topic/:id', postCtrl.findAllInTopic)
+router.get('/topic/:id', auth, postCtrl.findAllInTopic)
 
 // get one post
-router.get('/:id', postCtrl.findOneById)
+router.get('/:id', auth, postCtrl.findOneById)
 
 // create one 
-router.post('/', postCtrl.createOne)
+router.post('/', auth, postCtrl.createOne)
 
 // delete one
-router.delete('/:id', postCtrl.deleteOne)
+router.delete('/:id', auth, postCtrl.deleteOne)
 // delete by topicid
-router.delete('/topic/:id', postCtrl.deletePostByTopicId)
+router.delete('/topic/:id', auth, postCtrl.deletePostByTopicId)
 // delete bu userid
-router.delete('/user/:id', postCtrl.deletePostByUserId)
+router.delete('/user/:id', auth, postCtrl.deletePostByUserId)
 
 module.exports = router

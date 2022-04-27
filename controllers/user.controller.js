@@ -12,12 +12,6 @@ exports.findAll = (req, res) => {
 
 // find one user
 exports.findOneById = (req, res) => {
-    // User.findOne({where: {user_id: req.params.id}})
-    //     .then(rawUser => {
-    //         //var user = rawUser.JSON()
-    //         res.status(200).json({ rawUser })
-    //     })
-    //     .catch(err => console.log(err))
     User.findOne({where: {user_id: req.params.id}})
         .then(user => res.status(200).json( {user} ))
         .catch(err => res.status(400).json({err}))
@@ -114,6 +108,9 @@ exports.retrieveConnection = (req, res) => {
 
 // delete one user
 exports.deleteOne = (req, res) => {
+    if (req.auth.userId !== req.params.id && req.auth.userRole !== 'admin') {
+        return res.status(401).json({ message: 'unauthorized request' })
+    }
     User.destroy({where: {user_id: req.params.id }})
         .then((row) => {
             console.log(row)
@@ -125,6 +122,9 @@ exports.deleteOne = (req, res) => {
 
 // modify user
 exports.updateOne = (req, res) => {
+    if (req.auth.userId !== req.params.id && req.auth.userRole !== 'admin') {
+        return res.status(401).json({ message: 'unauthorized request' })
+    }
     let password;
     if (req.body.password) {
         bcrypt.hash(req.body.password, 10).then(hash => {

@@ -26,12 +26,23 @@ exports.findByUser = (req, res) => {
 
 // create one topic
 exports.createOne = (req, res) => {
-    const newTopic = Topic.build({
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-        user_id: req.body.user_id,
-        title: req.body.title,
-        body: req.body.topicBody
-    })
+    var newTopic = null;
+    if (req.file) {
+        console.log('with file')
+        newTopic = Topic.build({
+            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+            user_id: req.body.user_id,
+            title: req.body.title,
+            body: req.body.topicBody
+        })
+    } else {
+        console.log('without file')
+        newTopic = Topic.build({
+            user_id: req.body.user_id,
+            title: req.body.title,
+            body: req.body.topicBody
+        })
+    }
     newTopic.save()
         .then(() => res.status(201).json({ topic: newTopic }))
         .catch(err => res.status(401).json({ err }))
@@ -58,14 +69,26 @@ exports.addPostId = (req, res) => {
 
 // delete one topic
 exports.deleteOne = (req, res) => {
-    Topic.destroy({ where: { topic_id: req.params.id }})
-        .then(row => {
-            res.status(200).json({message: 'topic destroyed'})
+    Topic.findOne({where: {topic_id: req.params.id}})
+        .then(topic => {
+            let author_id = topic.data.topic.user_id
+            if (req.auth.userId !== author_id && req.auth.userRole !== 'admin') {
+                return res.status(404).json({ err: 'unauthorized request' })
+            }
+
+            Topic.destroy({ where: { topic_id: req.params.id }})
+                .then(row => {
+                    res.status(200).json({message: 'topic destroyed'})
+                })
+                .catch(err => res.status(401).json({ err }))
         })
-        .catch(err => res.status(401).json({ err }))
+        .catch(err => res.status(404).json({err}))
 }
 
 exports.deleteByUserId = (req, res) => {
+    if (req.auth.userId !== req.params.id && req.auth.userRole !== 'admin') {
+        return res.status(404).json({ err: 'unauthorized request' })
+    }
     Topic.destroy({where: {user_id: req.params.id}})
         .then(row => res.status(200).json({message: 'user topics destroyed'}))
         .catch(err => res.status(401).json({ err }))

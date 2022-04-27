@@ -1,2 +1,4 @@
-! generation d'id
-! implementer sequelize
+controle apres authentification: 
+    - update user
+    - suppr post, topic, user
+    - 
