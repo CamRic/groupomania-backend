@@ -27,6 +27,7 @@ exports.findByUser = (req, res) => {
 // create one topic
 exports.createOne = (req, res) => {
     var newTopic = null;
+    // console.log(req)
     if (req.file) {
         console.log('with file')
         newTopic = Topic.build({
@@ -43,6 +44,7 @@ exports.createOne = (req, res) => {
             body: req.body.topicBody
         })
     }
+    console.log(newTopic)
     newTopic.save()
         .then(() => res.status(201).json({ topic: newTopic }))
         .catch(err => res.status(401).json({ err }))
@@ -69,20 +71,12 @@ exports.addPostId = (req, res) => {
 
 // delete one topic
 exports.deleteOne = (req, res) => {
-    Topic.findOne({where: {topic_id: req.params.id}})
-        .then(topic => {
-            let author_id = topic.data.topic.user_id
-            if (req.auth.userId !== author_id && req.auth.userRole !== 'admin') {
-                return res.status(404).json({ err: 'unauthorized request' })
-            }
-
-            Topic.destroy({ where: { topic_id: req.params.id }})
+    Topic.destroy({ where: { topic_id: req.params.id }})
                 .then(row => {
                     res.status(200).json({message: 'topic destroyed'})
                 })
                 .catch(err => res.status(401).json({ err }))
-        })
-        .catch(err => res.status(404).json({err}))
+
 }
 
 exports.deleteByUserId = (req, res) => {
