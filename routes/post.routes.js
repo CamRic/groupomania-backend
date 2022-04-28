@@ -17,8 +17,6 @@ router.post('/', auth, postCtrl.createOne)
 
 // delete one
 router.delete('/:id', auth, postCtrl.deleteOne)
-// delete by topicid
-router.delete('/topic/:id', auth, postCtrl.deletePostByTopicId)
 // delete bu userid
 router.delete('/user/:id', auth, postCtrl.deletePostByUserId)
 

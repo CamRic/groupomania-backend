@@ -13,7 +13,6 @@ const postRoutes = require('./routes/post.routes')
 const app = express()
 
 // connect to db
-console.log("checking connection to db...")
 try {
     sequelize.authenticate()
     console.log('Connected to db!')

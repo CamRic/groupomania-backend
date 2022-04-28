@@ -7,19 +7,18 @@ const { json } = require('express/lib/response')
 exports.findAll = (req, res) => {
     User.findAll()
         .then(users => res.status(200).json({ users }))
-        .catch(err => res.status(400).json({ err }))
+        .catch(err => res.status(404).json({ err }))
 }
 
 // find one user
 exports.findOneById = (req, res) => {
     User.findOne({where: {user_id: req.params.id}})
         .then(user => res.status(200).json( {user} ))
-        .catch(err => res.status(400).json({err}))
+        .catch(err => res.status(404).json({err}))
 }
 
 // add one user to db
 exports.createOne = (req, res) => {
-    
     if (!req.body) {
         res.status(400).json({ message: 'no body in request'})
     }
@@ -76,11 +75,10 @@ exports.login = (req, res) => {
 
 // retrieve connection
 exports.retrieveConnection = (req, res) => {
-    
     const token = req.headers.authorization.split(' ')[1]
     jwt.verify(token, 'RANDOM_TOKEN_SECRET', (err, decoded) => {
         if (err) {
-            res.status(401).json({ err: 'bad token' })
+            res.status(400).json({ err: 'bad token' })
         }
         const userId = decoded.user_id
         User.findOne({where: {user_id: userId}})
@@ -102,7 +100,7 @@ exports.retrieveConnection = (req, res) => {
                 
                 })
             })
-            .catch(err => res.status(401).json({ err: 'cant retrieve connection, please login'}))
+            .catch(err => res.status(400).json({ err: 'cant retrieve connection, please login'}))
     })
 }
 
@@ -114,9 +112,9 @@ exports.deleteOne = (req, res) => {
     User.destroy({where: {user_id: req.params.id }})
         .then((row) => {
             console.log(row)
-            return res.status(204).json({ data: "user destroyed" })
+            return res.status(200).json({ data: "user destroyed" })
         })
-        .catch((err) => res.status(401).json({ err }))
+        .catch((err) => res.status(400).json({ err }))
 }
 
 
@@ -131,19 +129,11 @@ exports.updateOne = (req, res) => {
             password = hash
         })
     }
-    if (req.body.posts) {
-        console.log(req.body.posts)
-    }
     const user = {
         email: req.body.email,
         first_name: req.body.first_name,
         last_name: req.body.last_name,
-        posts: req.body.posts,
         password,
-    }
-    // file system
-    if (req.file) {
-        console.log('file in req')
     }
     User.update(user, {where: {user_id: req.params.id}})
         .then(data => {
@@ -152,10 +142,6 @@ exports.updateOne = (req, res) => {
             }
             res.status(200).json({ message: 'user modified' })
         })
-        .catch(err => res.status(500).json({ err }))
-    
-}
-
-exports.findTopics = (req, res) => {
+        .catch(err => res.status(400).json({ err }))
     
 }

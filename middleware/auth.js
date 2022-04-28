@@ -7,7 +7,6 @@ module.exports = (req, res, next) => {
         return res.status(401).json({ error: 'no auth'})
     }
     const requestToken = req.headers.authorization.split(' ')[1]
-    console.log('req token: ' + requestToken)
     jwt.verify(requestToken, 'RANDOM_TOKEN_SECRET', (err, decoded) => {
         if (err) {
             console.log(err)
@@ -15,10 +14,7 @@ module.exports = (req, res, next) => {
         } else {
             const requestUserId = decoded.user_id
             const requestUserRole = decoded.user_role
-            console.log(requestUserRole)
-            console.log(requestUserId)
             req.auth = {userId: requestUserId, userRole: requestUserRole}
-            console.log(req.auth)
             next()
         }
     })

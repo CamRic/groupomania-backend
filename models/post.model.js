@@ -19,7 +19,7 @@ const Post = sequelize.define('Post', {
         allowNull: false
     },
     body: {
-        type: Sequelize.TEXT, // ?
+        type: Sequelize.TEXT,
         allowNull: false
     }
 }, {
