@@ -2,7 +2,7 @@ const Topic = require('../models/topic.model')
 
 // find all topics
 exports.findAll = (req, res) => {
-    Topic.findAll()
+    Topic.findAll({order: [['createdAt', 'DESC']]})
         .then(topics => res.status(200).json({ topics }))
         .catch(err => res.status(401).json({ err }))
 }

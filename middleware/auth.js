@@ -23,19 +23,4 @@ module.exports = (req, res, next) => {
         }
     })
 
-    // try {
-    //     const requestToken = req.headers.authorization.split(' ')[1]
-    //     console.log('req token: ' + requestToken)
-    //     const decodedToken = jwt.verify(requestToken, 'RANDOM_TOKEN_SECRET')
-    //     console.log('decoded token: ' + decodedToken)
-    //     const requestTokenUserId = decodedToken.user_id
-    //     console.log(requestTokenUserId)
-    //     // console.log('req token: ', requestToken)
-    //     // console.log('decoded token: ', decodedToken)
-    //     req.auth = {userId: requestTokenUserId}
-    //     if (!req.auth.userId || req.auth.userId ==! req.params.id) throw 'invalid token'
-    //     else next()
-    // } catch {
-    //     res.status(401).send({ error: 'unauthorized request'})
-    // }
 }
