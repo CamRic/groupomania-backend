@@ -123,23 +123,30 @@ exports.updateOne = async (req, res) => {
     if (req.auth.userId !== req.params.id && req.auth.userRole !== 'admin') {
         return res.status(401).json({ message: 'unauthorized request' })
     }
-    let newPassword;
-    let user;
-    if (req.body.password) {
-        newPassword = await bcrypt.hash(req.body.password, 10)
-        user = {
-            email: req.body.email,
-            first_name: req.body.first_name,
-            last_name: req.body.last_name,
-            password: newPassword
-        }
-    } else {
-        user = {
-            email: req.body.email,
-            first_name: req.body.first_name,
-            last_name: req.body.last_name
-        }
+    let user = {
+        email: req.body.email,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
     }
+    if (req.body.password) {
+        user["password"] = await bcrypt.hash(req.body.password, 10)
+    }
+    console.log(user)
+    // if (req.body.password) {
+    //     newPassword = await bcrypt.hash(req.body.password, 10)
+    //     user = {
+    //         email: req.body.email,
+    //         first_name: req.body.first_name,
+    //         last_name: req.body.last_name,
+    //         password: newPassword
+    //     }
+    // } else {
+    //     user = {
+    //         email: req.body.email,
+    //         first_name: req.body.first_name,
+    //         last_name: req.body.last_name
+    //     }
+    // }
     User.update(user, {where: {user_id: req.params.id}})
         .then(data => {
             if (data[0] === 0) {
