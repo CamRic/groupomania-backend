@@ -119,28 +119,33 @@ exports.deleteOne = (req, res) => {
 
 
 // modify user
-exports.updateOne = (req, res) => {
+exports.updateOne = async (req, res) => {
     if (req.auth.userId !== req.params.id && req.auth.userRole !== 'admin') {
         return res.status(401).json({ message: 'unauthorized request' })
     }
-    let password;
+    let newPassword;
+    let user;
     if (req.body.password) {
-        bcrypt.hash(req.body.password, 10).then(hash => {
-            password = hash
-        })
-    }
-    const user = {
-        email: req.body.email,
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        password,
+        newPassword = await bcrypt.hash(req.body.password, 10)
+        user = {
+            email: req.body.email,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            password: newPassword
+        }
+    } else {
+        user = {
+            email: req.body.email,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name
+        }
     }
     User.update(user, {where: {user_id: req.params.id}})
         .then(data => {
             if (data[0] === 0) {
                 return res.status(404).json({ message: 'user not found' })
             }
-            res.status(200).json({ message: 'user modified' })
+            res.status(200).json({ data })
         })
         .catch(err => res.status(400).json({ err }))
     
