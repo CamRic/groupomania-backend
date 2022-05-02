@@ -15,6 +15,9 @@ router.get('/:id', auth, postCtrl.findOneById)
 // create one 
 router.post('/', auth, postCtrl.createOne)
 
+// update one
+router.put('/:id', auth, postCtrl.updateOne)
+
 // delete one
 router.delete('/:id', auth, postCtrl.deleteOne)
 // delete bu userid

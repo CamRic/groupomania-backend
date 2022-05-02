@@ -131,22 +131,7 @@ exports.updateOne = async (req, res) => {
     if (req.body.password) {
         user["password"] = await bcrypt.hash(req.body.password, 10)
     }
-    console.log(user)
-    // if (req.body.password) {
-    //     newPassword = await bcrypt.hash(req.body.password, 10)
-    //     user = {
-    //         email: req.body.email,
-    //         first_name: req.body.first_name,
-    //         last_name: req.body.last_name,
-    //         password: newPassword
-    //     }
-    // } else {
-    //     user = {
-    //         email: req.body.email,
-    //         first_name: req.body.first_name,
-    //         last_name: req.body.last_name
-    //     }
-    // }
+    
     User.update(user, {where: {user_id: req.params.id}})
         .then(data => {
             if (data[0] === 0) {

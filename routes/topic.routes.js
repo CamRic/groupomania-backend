@@ -17,6 +17,9 @@ router.get('/:id', auth, topicCtrl.findOneById)
 // create one topic
 router.post('/', multer, auth, topicCtrl.createOne)
 
+// modify topic
+router.put('/:id', multer, auth, topicCtrl.modifyOne)
+
 // delete one topic
 router.delete('/:id', auth, topicCtrl.deleteOne)
 // delete users topcs
