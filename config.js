@@ -1,9 +1,9 @@
 const config = {
     db: {
-        host: 'localhost',
-        user: 'root',
-        password: 'Cestuntroudeverdure',
-        database: 'groupomania'
+        // host: 'localhost',
+        // user: 'root',
+        // password: 'Cestuntroudeverdure',
+        // database: 'groupomania'
     }
 }
 
