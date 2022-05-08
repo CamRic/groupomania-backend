@@ -44,7 +44,6 @@ exports.createOne = (req, res) => {
 exports.modifyOne = (req, res) => {
     Topic.findOne({ where: { topic_id: req.params.id }})
         .then(response => {
-            console.log(response.topic_id)
             let topicAuthor = response.user_id
             if (topicAuthor !== req.auth.userId && req.auth.userRole !== 'admin') {
                 res.status(401).json({message: 'unauthorized request'})
@@ -55,6 +54,8 @@ exports.modifyOne = (req, res) => {
             }
             if (req.file) {
                 topic.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+            } else {
+                topic.imageUrl = ""
             }
             console.log(topic)
             Topic.update(topic, { where: { topic_id: req.params.id }})

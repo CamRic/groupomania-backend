@@ -35,7 +35,6 @@ exports.createOne = (req, res) => {
 exports.updateOne = (req, res) => {
     Post.findOne({ where: { post_id: req.params.id }})
         .then(response => {
-            console.log(response)
             if (response.user_id !== req.auth.userId && req.auth.userRole !== 'admin') {
                 res.status(401).json({ message: 'unauthorized request' })
             }

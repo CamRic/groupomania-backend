@@ -1,5 +1,0 @@
-controle apres authentification: 
-    - update user
-    - suppr post, topic, user
-
-refaire middleware auth!
